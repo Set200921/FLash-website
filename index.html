@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Flash mod for Minecraft by Sergney Selka Company</title>
+<link rel="icon" href="Photos/icon.ico" type="image/x-icon" />
+<style>
+    /* Общие стили */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f3e5f5; /* светло-фиолетовый фон */
+        color: #4b0082; /* темно-фиолетовый для текста */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Навигация */
+    nav {
+        display: flex;
+        justify-content: center;
+        background-color: #d1c4e9; /* светло-фиолетовая панель */
+        padding: 10px 0;
+    }
+
+    nav button {
+        background-color: transparent;
+        border: none;
+        margin: 0 15px;
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    nav button:hover {
+        background-color: #b39ddb; /* чуть темнее при наведении */
+        transform: translateY(-2px);
+    }
+
+    /* Контейнер для контента */
+    #content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    /* Обертка для анимации */
+    .page {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .page.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Основной стиль текста и элементов */
+    h1 {
+        font-size: 2em; /* крупный шрифт */
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Увеличенная кнопка Download с плавным эффектом */
+    a.download-btn {
+        display: inline-block;
+        padding: 20px 50px; /* увеличены размеры */
+        font-size: 1.6em; /* чуть больше шрифта */
+        color: #fff;
+        background-color: #7b1fa2; /* фиолетовая кнопка */
+        border-radius: 10px; 
+		transition:
+			background-color 0.3s,
+			transform 0.3s,
+			box-shadow 0.3s,
+			opacity 0.3s
+			/* добавлены плавные переходы для анимации появления/нажатия */;
+	}
+
+	a.download-btn:hover {
+		background-color:#6a1b9a; 
+		transform : translateY(-4px) scale(1.05); 
+		box-shadow : 0 6px 12px rgba(0,0,0,0.2); 
+	}
+
+	/* Для страницы "Поддержать автора" */
+	.support-info {
+		font-size :1.5em; 
+		text-align:center; 
+		max-width :600px; 
+		margin:auto; 
+		line-height :1.5em; 
+		padding-top :20px; 
+		padding-bottom :20px; 
+	}
+	
+	h2 {
+		margin-bottom :20px; 
+	}
+</style>
+</head>
+<body>
+<!-- Навигация -->
+<nav>
+    <button id="tab-home">Главная страница</button>
+    <button id="tab-support">Поддержать автора</button>
+</nav>
+
+<!-- Контент -->
+<div id="content">
+    <!-- Здесь будет динамически вставляться содержимое -->
+</div>
+
+<script>
+const contentDiv = document.getElementById('content');
+
+function loadPage(contentGenerator) {
+	const oldPage = document.querySelector('.page');
+	if (oldPage) {
+		oldPage.classList.remove('show');
+		setTimeout(() => {
+			if (oldPage.parentNode) oldPage.remove();
+			const newPage = contentGenerator();
+			newPage.classList.add('show');
+			contentDiv.appendChild(newPage);
+		},600);
+	} else {
+		const newPage = contentGenerator();
+		newPage.classList.add('show');
+		contentDiv.appendChild(newPage);
+	}
+}
+
+// Генератор главной страницы
+function createHomePage() {
+	const container = document.createElement('div');
+	container.className='page';
+
+	const title = document.createElement('h1');
+	title.textContent='The Flash mod for Minecraft by Sergney Selka Company';
+
+	const centerDiv=document.createElement('div');
+	centerDiv.style.display='flex';
+	centerDiv.style.flexDirection='column';
+	centerDiv.style.alignItems='center';
+
+	const mainText=document.createElement('div');
+	mainText.textContent='The Flash Minecraft Mod';
+	mainText.style.fontSize='2em';
+	mainText.style.marginBottom='20px';
+
+	const downloadLink=document.createElement('a');
+	downloadLink.href='https://ru.files.me/f/8zg7a5sr4f'; // замените на свою ссылку
+	downloadLink.className='download-btn';
+	downloadLink.textContent='Download';
+
+	centerDiv.appendChild(mainText);
+	centerDiv.appendChild(downloadLink);
+
+	container.appendChild(title);
+	container.appendChild(centerDiv);
+
+	return container;
+}
+
+// Генератор страницы поддержки
+function createSupportPage() {
+	const container=document.createElement('div');
+	container.className='page';
+
+	const supportDiv=document.createElement('div');
+	supportDiv.className='support-info';
+
+	const supportTitle = document.createElement('h2');
+	supportTitle.textContent='Поддержка автора';
+
+	const supportText = document.createElement('p');
+	supportText.textContent='Номер карты для поддержки:'
+
+;
+
+	const ul = document.createElement('ul');
+	ul.style.listStyle='none';
+	
+	const card1 = document.createElement('li');
+	card1.textContent='СберБанк - 2202208134870642';
+
+	const card2 = document.createElement('li');
+	card2.textContent='ТБанк - 2200701028427703';
+
+	
+	supportDiv.appendChild(supportTitle);
+	supportDiv.appendChild(supportText);
+	supportDiv.appendChild(ul);
+	
+	for (const card of [card1, card2]) {
+	    ul.appendChild(card);
+	    // Можно добавить стили или классы при необходимости
+	    // например, ul.style.paddingLeft='20px';
+	    // или supportDiv.classList.add('some-class');
+	    // Но в данном случае это не обязательно
+	    // Также можно использовать createTextNode вместо textContent, но это избыточно
+	    // так как textContent безопасен и не выполняет код
+	    // Поэтому оставляем так
+	    
+	    // Можно дополнительно добавить перенос строки или стили
+	    // если нужно
+	    
+	    // Например:
+	    // card.style.marginBottom='10px';
+	    
+	    // Но по умолчанию достаточно
+	    
+	    // Важно помнить, что все создается через DOM API - безопасно.
+	    
+	    // Если нужно вставить HTML с разметкой внутри элемента - лучше создавать элементы вручную.
+	    
+	    // В данном случае все просто.
+	    
+	    // Завершили цикл.
+	    
+	    // Готово.
+	    
+	  }
+	
+	container.appendChild(supportDiv);
+
+	return container;
+
+}
+
+document.getElementById('tab-home').addEventListener('click', () => {
+	loadPage(createHomePage);
+});
+
+document.getElementById('tab-support').addEventListener('click', () => {
+	loadPage(createSupportPage);
+});
+
+window.onload=()=>{ loadPage(createHomePage); };
+</script>
+</body>
+</html>
