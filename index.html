@@ -6,121 +6,316 @@
 <title>The Flash mod for Minecraft by Sergney Selka Company</title>
 <link rel="icon" href="Photos/icon.ico" type="image/x-icon" />
 <style>
-    /* Общие стили */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f3e5f5; /* светло-фиолетовый фон */
-        color: #4b0082; /* темно-фиолетовый для текста */
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+/* Общие стили с чёрным фоном и подготовкой к анимации молний */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Чёрный фон */
+    position: relative;
+    overflow: hidden;
+    color: #fff; /* белый текст для контраста */
+}
 
-    /* Навигация */
-    nav {
-        display: flex;
-        justify-content: center;
-        background-color: #d1c4e9; /* светло-фиолетовая панель */
-        padding: 10px 0;
-    }
+/* Контейнер для молний */
+#lightning-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* за контентом */
+}
 
-    nav button {
-        background-color: transparent;
-        border: none;
-        margin: 0 15px;
-        font-size: 1.2em;
-        cursor: pointer;
-        padding: 8px 16px;
-        border-radius: 4px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
+/* Остальные стили остаются без изменений, только убираем старый фон и анимацию молний */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 124, 34, 0.8);
+    padding: 10px 0;
+}
 
-    nav button:hover {
-        background-color: #b39ddb; /* чуть темнее при наведении */
-        transform: translateY(-2px);
-    }
+nav button {
+    background-color: transparent;
+    border: none;
+    margin: 0 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+    color:#fff;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
 
-    /* Контейнер для контента */
-    #content {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 20px;
-    }
+nav button:hover {
+    background-color:#ff6f00; 
+    transform : translateY(-2px);
+}
 
-    /* Обертка для анимации */
-    .page {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
+/* Контейнер для контента */
+#content {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px20px;
+}
 
-    .page.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Анимация появления страниц */
+.page {
+    opacity:0;
+    transform:translateY(30px);
+    transition:.6s ease all;
+}
+.page.show {
+    opacity:1;
+    transform:none;
+}
 
-    /* Основной стиль текста и элементов */
-    h1 {
-        font-size: 2em; /* крупный шрифт */
-        text-align: center;
-        margin-bottom: 30px;
-    }
+/* Заголовки и текст */
+h1 {
+    font-size:2em; 
+    text-align:center; 
+    margin-bottom:30px; 
+}
+h2 {
+	margin-bottom :20px; 
+	color:#fff8e1; 
+}
+.support-info {
+	font-size :1.5em; 
+	text-align:center; 
+	max-width :600px; 
+	margin:auto; 
+	line-height :1.5em; 
+	padding-top :20px; 
+	padding-bottom :20px; 
+	color:#fff8e1; 
+}
 
-    /* Увеличенная кнопка Download с плавным эффектом */
-    a.download-btn {
-        display: inline-block;
-        padding: 20px 50px; /* увеличены размеры */
-        font-size: 1.6em; /* чуть больше шрифта */
-        color: #fff;
-        background-color: #7b1fa2; /* фиолетовая кнопка */
-        border-radius: 10px; 
-		transition:
-			background-color 0.3s,
-			transform 0.3s,
-			box-shadow 0.3s,
-			opacity 0.3s
-			/* добавлены плавные переходы для анимации появления/нажатия */;
-	}
-
-	a.download-btn:hover {
-		background-color:#6a1b9a; 
-		transform : translateY(-4px) scale(1.05); 
-		box-shadow : 0 6px 12px rgba(0,0,0,0.2); 
-	}
-
-	/* Для страницы "Поддержать автора" */
-	.support-info {
-		font-size :1.5em; 
-		text-align:center; 
-		max-width :600px; 
-		margin:auto; 
-		line-height :1.5em; 
-		padding-top :20px; 
-		padding-bottom :20px; 
-	}
-	
-	h2 {
-		margin-bottom :20px; 
-	}
+/* Кнопка Download */
+a.download-btn {
+	display:inline-block;
+	padding:20px 50px; 
+	font-size:.9em; 
+	color:#fff; 
+	background-image:
+	linear-gradient(135deg, #ff7e5f, #feb47b);
+	border-radius:10px; 
+	box-shadow:
+		0 4px 15px rgba(255,124,34,0.3);
+	transition:
+		background-image .3s,
+		transform .3s,
+		box-shadow .3s,
+		opacity .3s
+}
+a.download-btn:hover {
+	background-image:
+	linear-gradient(135deg, #ff6f00, #ff9800);
+	transform : translateY(-4px) scale(1.05); 
+	box-shadow : inset 0 -4px 8px rgba(255,124,34,0.4),0 6px 12px rgba(255,124,34,0.2); 
+}
 </style>
 </head>
 <body>
+<!-- Канвас для молний -->
+<canvas id="lightning-canvas"></canvas>
+
 <!-- Навигация -->
 <nav>
-    <button id="tab-home">Главная страница</button>
-    <button id="tab-support">Поддержать автора</button>
+<button id="tab-home">Главная страница</button>
+<button id="tab-support">Поддержать автора</button>
 </nav>
 
 <!-- Контент -->
-<div id="content">
-    <!-- Здесь будет динамически вставляться содержимое -->
-</div>
+<div id="content"></div>
 
 <script>
+// Инициализация канваса
+const canvas = document.getElementById('lightning-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Массив для хранения молний
+let lightningStrikes = [];
+
+// Функция для генерации случайных линий-молний
+function createLightning() {
+  const rand = Math.random();
+  let orientation;
+  if (rand < 0.33) {
+    orientation = 'vertical';
+  } else if (rand < 0.66) {
+    orientation = 'horizontal';
+  } else {
+    orientation = 'diagonal';
+  }
+
+  if (orientation === 'vertical') {
+    // Вертикальная молния
+    const startX = Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.1;
+    const endX = startX + (Math.random() - 0.5) * 200;
+    const startY = Math.random() * window.innerHeight * 0.2;
+    const endY = startY + Math.random() * window.innerHeight * 0.5 + window.innerHeight * 0.2;
+
+    const points = [{x: startX, y: startY}];
+    const segmentsCount = Math.floor(Math.random() *3)+8;
+
+    let currentX= startX;
+    for(let i=1;i<=segmentsCount;i++) {
+      currentX += (Math.random()-0.5)*70;
+      const y= startY+ (i/segmentsCount)*(endY-startY)+(Math.random()-0.5)*80;
+      points.push({x:currentX,y:y});
+      if(i===segmentsCount){
+        points.push({x:endX,y:endY});
+      }
+    }
+    return {points};
+  
+  } else if (orientation === 'horizontal') {
+    // Горизонтальная молния
+    const startY= Math.random()*window.innerHeight*0.8+window.innerHeight*0.1;
+    const endY= startY+(Math.random()-0.5)*200;
+
+    const startX= Math.random()*window.innerWidth*0.2; // начинаем слева
+    const endX= startX+Math.random()*window.innerWidth*0.6+window.innerWidth*0.2;
+
+    const points= [{x:startX,y:startY}];
+    const segmentsCount= Math.floor(Math.random()*3)+8;
+
+    let currentY=startY;
+    for(let i=1;i<=segmentsCount;i++){
+      currentY+= (Math.random()-0.5)*70;
+      const x= startX+ (i/segmentsCount)*(endX-startX)+ (Math.random()-0.5)*80;
+      points.push({x:x,y:currentY});
+      if(i===segmentsCount){
+        points.push({x:endX,y:endY});
+      }
+    }
+    return {points};
+
+  } else {
+    // Диагональная молния
+    // Выбираем начальную точку в левом нижнем или верхнем углу, и идём по диагонали
+    const fromTopOrBottom = Math.random() < 0.5; // выбираем сторону
+    let startX, startY, endX, endY;
+
+    if (fromTopOrBottom) {
+      // начинаем сверху слева или справа
+      startX = Math.random() < 0.5 ? 0 : window.innerWidth;
+      startY = Math.random() * window.innerHeight * 0.2; // чуть ниже верха
+      endX = Math.random() < 0.5 ? 0 : window.innerWidth;
+      endY = window.innerHeight; // до низа
+    } else {
+      // начинаем снизу слева или справа
+      startX = Math.random() < 0.5 ? 0 : window.innerWidth;
+      startY = window.innerHeight - Math.random() * window.innerHeight * 0.2; // чуть выше низа
+      endX = Math.random() < 0.5 ? 0 : window.innerWidth;
+      endY = 0; // до верха
+    }
+
+    const points= [{x:startX,y:startY}];
+    const segmentsCount= Math.floor(Math.random()*3)+8;
+
+    for(let i=1;i<=segmentsCount;i++){
+      const t= i/segmentsCount; // прогресс по линии
+      let x= startX + t*(endX - startX);
+      let y= startY + t*(endY - startY);
+      
+      // добавляем случайные отклонения для эффекта молнии
+      x += (Math.random()-0.5)*80;
+      y += (Math.random()-0.5)*80;
+
+      points.push({x:x,y:y});
+      
+      if(i===segmentsCount){
+        points.push({x:endX,y:endY});
+      }
+    }
+
+    return {points};
+  }
+
+
+  // Создаем массив точек для ломанных линий
+  const points = [{x:startX,y:startY}];
+  
+  let currentX = startX;
+
+  // Увеличиваем количество сегментов для большего изгиба
+  const segmentsCount = Math.floor(Math.random() *3) +8; // от6 до8 сегментов
+
+   for(let i=1;i<=segmentsCount;i++) { // создаем ломанные сегменты
+      currentX += (Math.random() -0.5)*70; // смещение по X
+      const y = startY + (i/segmentsCount)*(endY - startY) + (Math.random()-0.5)*80; // по Y с шумом
+      points.push({x:currentX,y:y});
+      
+      if(i===segmentsCount){
+        points.push({x:endX,y:endY});
+      }
+   }
+   
+   return {points};
+}
+
+// Функция для рисования молнии
+function drawLightning(strike) {
+   ctx.strokeStyle='rgba(255,165,40,'+strike.opacity+')'; // оранжевый с прозрачностью
+   ctx.shadowColor='orange';
+   ctx.shadowBlur=100;
+
+   ctx.lineWidth=3;
+
+   ctx.beginPath();
+   ctx.moveTo(strike.points[0].x,strike.points[0].y);
+   for(let i=1;i<strike.points.length;i++) {
+       ctx.lineTo(strike.points[i].x,strike.points[i].y);
+   }
+   ctx.stroke();
+}
+
+// Основной цикл анимации
+function animate() {
+   ctx.fillStyle='rgba(0,0,0,0.2)'; // немного затемняем фон для эффекта мерцания
+   ctx.fillRect(0,0,canvas.width,canvas.height);
+
+   // Увеличиваем вероятность появления новых молний для более частых вспышек
+   if(Math.random()<0.30){ // увеличена вероятность с .05 до .15
+       lightningStrikes.push({
+           ...createLightning(),
+           opacity:1,
+           lifeTime:-1 // живет пока не исчезнет полностью
+       });
+   }
+
+   // Обновляем и рисуем все молнии
+   for(let i=lightningStrikes.length-1;i>=0;i--) {
+       const strike=lightningStrikes[i];
+       drawLightning(strike);
+
+       // Уменьшаем прозрачность быстрее для более быстрого исчезновения
+       strike.opacity -= Math.random()*0.03 + 0.02;
+
+       if(strike.opacity<=0){
+           lightningStrikes.splice(i,1);
+       }
+   }
+
+   requestAnimationFrame(animate);
+}
+
+// Запуск анимации
+animate();
+
+
+// Остальной код страницы без изменений
+
 const contentDiv = document.getElementById('content');
 
 function loadPage(contentGenerator) {
@@ -159,7 +354,7 @@ function createHomePage() {
 	mainText.style.marginBottom='20px';
 
 	const downloadLink=document.createElement('a');
-	downloadLink.href='https://ru.files.me/f/8zg7a5sr4f'; // замените на свою ссылку
+	downloadLink.href='https://drive.google.com/file/d/1wqG09bnYIJXO2Ydu0OZoT8Apgd7yr5-O/view?usp=sharing'; // замените на свою ссылку
 	downloadLink.className='download-btn';
 	downloadLink.textContent='Download';
 
@@ -204,32 +399,6 @@ function createSupportPage() {
 	
 	for (const card of [card1, card2]) {
 	    ul.appendChild(card);
-	    // Можно добавить стили или классы при необходимости
-	    // например, ul.style.paddingLeft='20px';
-	    // или supportDiv.classList.add('some-class');
-	    // Но в данном случае это не обязательно
-	    // Также можно использовать createTextNode вместо textContent, но это избыточно
-	    // так как textContent безопасен и не выполняет код
-	    // Поэтому оставляем так
-	    
-	    // Можно дополнительно добавить перенос строки или стили
-	    // если нужно
-	    
-	    // Например:
-	    // card.style.marginBottom='10px';
-	    
-	    // Но по умолчанию достаточно
-	    
-	    // Важно помнить, что все создается через DOM API - безопасно.
-	    
-	    // Если нужно вставить HTML с разметкой внутри элемента - лучше создавать элементы вручную.
-	    
-	    // В данном случае все просто.
-	    
-	    // Завершили цикл.
-	    
-	    // Готово.
-	    
 	  }
 	
 	container.appendChild(supportDiv);
